@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<style>
+		
+		.classDropdown-content {
+  			display: none;
+  			position: absolute;
+		}
+
+		.classDropdown-content a {
+  			color: black;
+  			padding: 12px 16px;
+  			text-decoration: none;
+  			display: block;
+		}
+		.show {display: block;}
+		
+	</style>
+	<style>
+		.mainDiv{
+			border: 2px outset skyblue;
+			height: 200px;
+			width: 50%;
+			margin-left: 25%;
+		}
+
+	</style>
+	<style>
+		.classForm{
+			margin-top: 10%; 
+		}
+	</style>
+	<script>
+		function dropMenuFunction(){
+			document.getElementById("idDropDownContent").classList.toggle("show");
+		}
+		window.onclick = function(event) {
+		if (!event.target.matches('.classDropDown')) {
+			var dropdowns = document.getElementsByClassName("classDropdown-content");
+			var i;
+			for (i = 0; i < dropdowns.length; i++) {
+				var openDropdown = dropdowns[i];
+				if (openDropdown.classList.contains('show')) {
+					openDropdown.classList.remove('show');
+				}
+			}
+		}
+	}
+	</script>
+	<script>
+		function showLectureForm(){
+			document.getElementById("idLectureInput").style.display ="block";
+		}
+		function showArticleForm(){
+			document.getElementById("idArticleInput").style.display ="block";
+		}
+	</script>
+	<script>
+		$(document).ready(function(){
+			$(".classDropDown").click(function (e)
+			{
+				e.preventDefault();
+				$(".classDropDown").attr("disabled", true);
+			})
+		})
+	</script>
+</head>
+<body>
+	<div class="mainDiv" >
+		<button class="classDropDown" onclick="dropMenuFunction()">Add</button>
+		<div class="classDropdown-content" id="idDropDownContent">
+			<button id="idLectureBtn" onclick="showLectureForm()">Lecture</button>
+			<button id="idArticleBtn" onclick="showArticleForm()">Article</button>
+		</div>
+		<div class="classForm">
+			<input placeholder="Enter section name." id="idLectureInput" style="display: none;">
+			<input placeholder="Enter article" id="idArticleInput" style="display: none;">
+		</div>
+	</div>
+
+</body>
+</html>
+
+
