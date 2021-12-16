@@ -3,80 +3,157 @@
 <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<style>
-		
-		.classDropdown-content {
+		.classDropdown-content 
+		{
   			display: none;
   			position: absolute;
 		}
 
-		.classDropdown-content a {
+		.classDropdown-content a 
+		{
   			color: black;
   			padding: 12px 16px;
   			text-decoration: none;
   			display: block;
 		}
 		.show {display: block;}
-		
-	</style>
-	<style>
-		.mainDiv{
-			border: 2px outset skyblue;
-			height: 200px;
-			width: 50%;
-			margin-left: 25%;
-		}
 
-	</style>
-	<style>
-		.classForm{
-			margin-top: 10%; 
+		
+		.mainDiv
+		{
+			border: 2px outset black;
+			height: 400px;
+			width: 80%;
+			margin-left: 5%;
+		}
+		.classDisplayContents
+		{
+			border: 2px outset black;
+			height: 200px;
+			width: 30%;
+			margin-left: 60%;
+		}
+		.classForm
+		{
+			margin-top: 5%; 
 		}
 	</style>
 	<script>
-		function dropMenuFunction(){
+		function dropMenuFunction()
+		{
 			document.getElementById("idDropDownContent").classList.toggle("show");
 		}
-		window.onclick = function(event) {
-		if (!event.target.matches('.classDropDown')) {
-			var dropdowns = document.getElementsByClassName("classDropdown-content");
-			var i;
-			for (i = 0; i < dropdowns.length; i++) {
-				var openDropdown = dropdowns[i];
-				if (openDropdown.classList.contains('show')) {
-					openDropdown.classList.remove('show');
+		window.onclick = function(event) 
+		{
+			if (!event.target.matches('.classDropDown')) 
+			{
+				var dropdowns = document.getElementsByClassName("classDropdown-content");
+				var i;
+				for (i = 0; i < dropdowns.length; i++) 
+				{
+					var openDropdown = dropdowns[i];
+					if (openDropdown.classList.contains('show')) 
+					{
+						openDropdown.classList.remove('show');
+					}
 				}
 			}
 		}
-	}
 	</script>
 	<script>
-		function showLectureForm(){
+		function showLectureForm()
+		{
 			document.getElementById("idLectureInput").style.display ="block";
+			document.getElementById("idLectureSaveBtn").style.display ="block";
+			document.getElementById("idCancelLecture").style.display ="block";
 		}
-		function showArticleForm(){
+		
+		function showArticleForm()
+		{
 			document.getElementById("idArticleInput").style.display ="block";
+			document.getElementById("idArticleSaveBtn").style.display ="block";
 		}
+
 	</script>
-	<script>
-		$(document).ready(function(){
+	<!-- <script> //To disable add button once clicked.
+		$(document).ready(function()
+		{
 			$(".classDropDown").click(function (e)
 			{
 				e.preventDefault();
 				$(".classDropDown").attr("disabled", true);
 			})
 		})
+		
+	</script> -->
+	<script>
+		var lectureArr = [];
+		
+		function addArr(callback)
+		{
+			var inputval = document.getElementById("idLectureInput").value;
+			if(inputval != '')
+			{
+				lectureArr.push(inputval);
+			}
+			callback();
+		}
+		function showArr()
+		{
+			var len = lectureArr.length;
+			document.getElementById('idShowContents').innerHTML='';
+			if(len > 0)
+			{
+				for(i=0; i<len;i++){
+					document.getElementById('idShowContents').innerHTML += lectureArr[i]+"<br>";
+				}
+			}else{
+				alert("Please add using the above text box");
+			}
+		}
+
 	</script>
+	<script>
+		function cancelLecture()
+		{
+			
+			document.getElementById("idLectureInput").style.display ="none";
+			document.getElementById("idLectureSaveBtn").style.display ="none";
+			document.getElementById("idCancelLecture").style.display ="none";
+			// document.querySelectorAll("#idLectureInput, #dLectureSaveBtn, #idCancelLecture").style.display = "none";
+		}
+		
+		
+	</script>
+	<script>
+		function incrementValue()
+		{
+			var value = parseInt(document.getElementById('idLectureInput').value, 10);
+			value = isNaN(value) ? 0 : value;
+			value++;
+			
+			document.getElementById('idLectureInput').value = value;
+		}
+	</script>
+	
 </head>
 <body>
 	<div class="mainDiv" >
 		<button class="classDropDown" onclick="dropMenuFunction()">Add</button>
 		<div class="classDropdown-content" id="idDropDownContent">
-			<button id="idLectureBtn" onclick="showLectureForm()">Lecture</button>
+			<button id="idLectureBtn" onclick="showLectureForm()" >Lecture</button>
 			<button id="idArticleBtn" onclick="showArticleForm()">Article</button>
 		</div>
-		<div class="classForm">
-			<input placeholder="Enter section name." id="idLectureInput" style="display: none;">
-			<input placeholder="Enter article" id="idArticleInput" style="display: none;">
+		<div class="classForm">  
+			<!-- Lecture and article buttons which os hidden unless button clicked. -->
+			<input class="classLecture" placeholder="Enter the lecture" id="idLectureInput" style="display: none; height: 30px; width: 300px;" value="Lecture 1"> 
+			<button id="idLectureSaveBtn" style="display: none;" onclick="addArr(showArr); incrementValue()" >Save</button>
+			<button id="idCancelLecture" style="display: none;" onclick="cancelLecture()">Cancel</button>
+			<br> 
+			<input placeholder="Enter article" id="idArticleInput" style="display: none; height: 30px; width: 300px;">
+			<button id="idArticleSaveBtn" style="display: none;">Save</button>
+		</div>
+		<div class="classDisplayContents" id="idShowContents">
 		</div>
 	</div>
 
