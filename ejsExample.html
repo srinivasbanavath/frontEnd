@@ -10,7 +10,6 @@
             var lectNum = 1;  // 1
             var objIdVal = 0;
             function addLectureInput(){
-                // $(".classAddBtn").attr("disabled", true);
                 let lectArrLen = lectureArr.length;
                 let objLectNameVal = '';
                 let lectureObj = {id: objIdVal, lectureName: objLectNameVal, lectNameState: "edit", lectArticleDraftStatus: false, lectureArticle: {article: "", state: ""}};
@@ -63,9 +62,6 @@
                 return template;
                 
             }
-            // function templateIntoDom(template){
-            //     $(idMainDiv).append(template);
-            // }
             function displayLectNameElement(){
                 $(idMainDiv).empty();
                 for(var ctr = 0; ctr < lectureArr.length; ctr++){ 
@@ -128,25 +124,16 @@
             function addArticleTextArea(lectArrLen, objIdVal){
                 let idIndex = getIndexByLectId(objIdVal);
                 lectureArr[idIndex].lectureArticle.state = "edit";
-                // $(`#idArticleOptionDiv${lectArrLen}`).replaceWith(contentStateListEditDisplay(lectArrLen, objIdVal));
                 $(`#idDisplayLectNameDiv${lectArrLen}`).append(contentStateListEditDisplay(lectArrLen, objIdVal));
             }
             function addLectArticleToArr(lectArrLen, objIdVal){
                 var idIndex = getIndexByLectId(objIdVal);
                 var textAreaContent = $(`#idArticle${lectArrLen}`).val();
-                // console.log(textAreaContent);
-                // console.log(objIdVal);
-                
                 lectureArr[idIndex].lectureArticle.state = 'display';
                 lectureArr[idIndex].lectureArticle.article = textAreaContent;
-                // console.log(lectureArr);
                 $(`#idTextAreaDiv${lectArrLen}`).remove();
                 $(`#idDisplayLectNameDiv${lectArrLen}`).append(contentStateListEditDisplay(lectArrLen, objIdVal, textAreaContent));
             } 
-            // function showContent(lectArrLen, textAreaContent){
-            //     $(`#idTextAreaDiv${lectArrLen}`).remove();
-            //     $(`#idDisplayLectNameDiv${lectArrLen}`).append(contentStateListEditDisplay(lectArrLen, objIdVal, textAreaContent));
-            // }
             function editArticle(lectArrLen, objIdVal){
                 
                 let idIndex = getIndexByLectId(objIdVal);
@@ -201,197 +188,3 @@
     </body>
 </html>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <!DOCTYPE html>
-<html>
-	<head>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script>
-            var lectureArr = [];
-            const idMainDiv = '#idMainDiv';
-            var lectNum = 1;  // 1
-            var objIdVal = 0;
-            function addLectureInput(){
-                $(".classAddBtn").attr("disabled", true);
-                var lectArrLen = lectureArr.length;
-                var objLectNameVal = '';
-                
-                $(idMainDiv).append(editLectNameTemplate(lectArrLen, objLectNameVal));
-            }
-            function editLectNameTemplate(lectArrLen, objLectNameVal){
-                
-                var editLectNameHtml = `<div id="idEditDiv${lectArrLen}" style = "border: 1px solid black; width: 500px; margin-left: 100px;" ><div id= "idLabelDiv${lectArrLen}" style= "font-size: initial; margin-left: 10px" ><label id= "idLectureLabel${lectArrLen}" >Lecture </label>${lectArrLen + 1}<label>: </label>
-                <input id="idLectureInput${lectArrLen}" type= "text" placeholder="Enter a Title." value= "${objLectNameVal}"></div>
-                <div id= "idSaveCancelDiv${lectArrLen}" style = "margin-left: 400px; width: 100px;"><button id= "idCancelBtn${lectArrLen}" onclick= "cancelBtn(${lectArrLen})">cancel</button>
-                <button id="idSaveBtn${lectArrLen}" onclick="addToLectureArr(${lectArrLen})" style= "margin-left: 10px;">save</button></div></div>`;
-                
-                return editLectNameHtml;
-                
-            }
-            function cancelBtn(lectArrLen){
-				$(`#idEditDiv${lectArrLen}`).remove();
-				$(".classAddBtn").attr("disabled", false);
-
-			}
-            
-            function addToLectureArr(lectArrLen){
-                objLectNameVal = document.getElementById(`idLectureInput${lectArrLen}`).value;
-                for(var ctr = 0; ctr < lectureArr.length; ctr++){
-					if(lectureArr[ctr].id === objIdVal){
-						lectureArr[ctr].lectureName = document.getElementById(`idLectureInput${lectArrLen}`).value;
-                        console.log(lectureArr[ctr]);
-                        displaylectNameElement();
-                        // objIdVal++;
-                        var len = lectureArr.length;
-                        objIdVal = lectureArr[len - 1].id + 1;
-                        $(".classAddBtn").attr("disabled", false);
-                        return;
-					}
-				}
-                var lectureObj = {id: objIdVal, lectureName: objLectNameVal, lectNameState: "", lectArticleDraftStatus: true, lectArticle: {lectureArticle: "", state: ""}};
-				lectureArr.push(lectureObj);
-                var len = lectureArr.length;
-                objIdVal = lectureArr[len - 1].id + 1;
-				lectNum++; //2
-				$(".classAddBtn").attr("disabled", false);
-				displaylectNameElement(lectArrLen);
-            }
-            function displaylectNameElement(){
-				$(idMainDiv).empty();
-                for(var ctr = 0; ctr < lectureArr.length; ctr++){ 
-                    var objLectNameVal = lectureArr[ctr].lectureName;
-                    var objIdVal = lectureArr[ctr].id;
-                    var objLectContent = lectureArr[ctr].lectureArticle;
-                    $(idMainDiv).append(displayLectNameTemplate(ctr , ctr + 1, objLectNameVal, objIdVal));
-                    if(objLectContent != null){
-                        $(idMainDiv).append(showContent(ctr, objLectContent));
-
-                    }   
-                }
-               
-                console.log(lectureArr);	
-			}
-            function displayLectNameTemplate(lectArrLen, lectNum, objLectNameVal, objIdVal){ //3
-                var displayLectNameHtml = `<div id="idDisplayLectNameDiv${lectArrLen}" style = "border: 1px solid black; width: 500px; margin-left: 100px;" ><div id= "idLabelDiv${lectArrLen}" style= "font-size: initial; margin-left: 10px" ><label id= "idLectureLabel${lectArrLen}" >Lecture </label>${lectArrLen + 1}<label>: </label>
-                <span id="idLectNameSpan${lectArrLen}">${objLectNameVal}</span></div>
-                <div id= "idEditRemoveDiv${lectArrLen}" style = "margin-left: 350px; width: 150px;"><button id= "idEditBtn${lectArrLen}" onclick= "editLectName(${lectArrLen}, ${lectNum})">Edit</button>
-                <button id="idRemoveBtn${lectArrLen}" onclick="removeDisplay(${lectArrLen})">Remove</button>
-                <button id= "idcontentBtn${lectArrLen}" onclick = "showContentOptions(${lectArrLen}, ${objIdVal})">Content</button></div></div>`;
-                return displayLectNameHtml;
-			}
-            function editLectName(lectArrLen){
-                objIdVal = lectureArr[lectArrLen].id;
-                console.log(objLectNameVal);
-                $(idMainDiv).empty();
-                for(var ctr = 0; ctr < lectureArr.length; ctr++){ 
-                    if(lectureArr[ctr].id === objIdVal){
-                        $(idMainDiv).append(editLectNameTemplate(ctr, lectureArr[ctr].lectureName));
-
-                    }
-                    else{
-                        $(idMainDiv).append(displayLectNameTemplate(ctr , ctr + 1, lectureArr[ctr].lectureName));
-                    }
-                    
-                }
-            }
-            function removeDisplay(lectArrLen){
-                lectureArr.splice(lectArrLen, 1);
-                var len = lectureArr.length;
-                if(len > 0){
-                    objIdVal = lectureArr[len - 1].id + 1;
-                }
-                
-                console.log(lectureArr);
-                $(`#idReplaceDiv${lectArrLen}`).remove(); 
-                console.log(lectureArr.length);
-                renderLectureSequence(lectArrLen);	
-			}
-            function renderLectureSequence(lectureArrLen){
-				$(idMainDiv).empty();
-				for(var ctr = 0; ctr < lectureArr.length; ctr++){
-					$(idMainDiv).append(displayLectNameTemplate(ctr , ctr + 1, lectureArr[ctr].lectureName));
-                    
-				}
-			}
-            function contentOptionsTemplate(lectArrLen, objIdVal){
-                let contentOptionsHtml = `<div id= "idArticleOptionDiv${lectArrLen}" style= "border: 1px solid black; width: 500px;"><div id= "idArticleDiv${lectArrLen}" style= "margin-top: 3px;">
-                <button id= "idArticleBtn${lectArrLen}" onclick= "addArticleTextArea(${lectArrLen}, ${objIdVal})" >Article</button></div></div>`;
-                return contentOptionsHtml;
-            }
-            function showContentOptions(lectArrLen, objIdVal){
-                $(`#idcontentBtn${lectArrLen}`).attr("disabled", true);
-                $(`#idDisplayLectNameDiv${lectArrLen}`).append(contentOptionsTemplate(lectArrLen, objIdVal));
-                // $(idMainDiv).append(contentOptionsTemplate(lectArrLen, objIdVal));
-            }
-            function articleTextAreaTemplate(lectArrLen, objIdVal){
-                let articleTextAreaHtml = `<div id= "idTextAreaDiv${lectArrLen}" style= "border: 1px solid black; width: 500px;"><textarea id= "idArticle${lectArrLen}" style= "width: 300px;"></textarea>
-                <button id= "idSaveArticleBtn${lectArrLen}" onclick= "addLectArticleToArr(${lectArrLen}, ${objIdVal})">Save Article</button></div>`;
-                return articleTextAreaHtml;
-            }
-            function addArticleTextArea(lectArrLen, objIdVal){
-                $(`#idArticleOptionDiv${lectArrLen}`).replaceWith(articleTextAreaTemplate(lectArrLen, objIdVal));
-            }
-            function showContentTemplate(lectArrLen, textAreaContent){
-                var showContentHtml = `<div id= "idSpanContent${lectArrLen}" style= "border: 1px solid black; width: 500px;">${textAreaContent}
-                    <button id ="idEditArticleBtn${lectArrLen}" onclick = "">Edit article.</button>
-                    <button id = "idDeleteArticleBtn${lectArrLen}" onclick= "deleteArticle(${lectArrLen}, ${textAreaContent})">Delete article.</button></div>`;
-                return showContentHtml;
-            }
-        
-            function showContent(lectArrLen, textAreaContent){
-                $(`#idTextAreaDiv${lectArrLen}`).remove();
-                $(`#idDisplayLectNameDiv${lectArrLen}`).append(showContentTemplate(lectArrLen, textAreaContent));
-            }
-
-            function addLectArticleToArr(lectArrLen, objIdVal){
-                let textAreaContent = $(`#idArticle${lectArrLen}`).val();
-                console.log(textAreaContent);
-                console.log(objIdVal);
-                var idIndex;
-                for(var ctr = 0; ctr < lectureArr.length; ctr++){
-                    if(lectureArr[ctr].id === objIdVal){
-                        idIndex = ctr;
-                    }
-                    else{
-                        console.log("Id not Found.");
-                    }
-                }
-                lectureArr[idIndex].lectureArticle = textAreaContent;
-                console.log(lectureArr);
-                showContent(lectArrLen, textAreaContent);
-            }
-        </script>
-
-    </head>
-    <body>
-        
-        <button class="classAddBtn" id="idAddBtn" style="margin-top: 30px; margin-left: 80%;" onclick="addLectureInput()">ADD</button>
-		<div class="classMainDiv" id="idMainDiv" style = "margin-top: 10px; min-height: 50px ;height : auto; border: 1px solid black; width: 700px; margin-left: 25%;"></div>
-    </body>
-</html> -->
