@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 		<script type="text/javascript" src="ejs.js"> </script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script>
@@ -10,10 +10,10 @@
             var lectNum = 1;  // 1
             var objIdVal = 0;
             function addLectureInput(){
-                $(`#idAddBtn`).attr("disabled", true);
+                // $(`#idAddBtn`).attr("disabled", true);
                 let lectArrLen = lectureArr.length;
                 let objLectNameVal = '';
-                let lectureObj = {id: objIdVal, lectureName: objLectNameVal, lectNameState: "EDIT", lectArticleDraftStatus: false, lectureArticle: {article: "", state: ""}};
+                let lectureObj = {id: objIdVal, lectureName: objLectNameVal, lectNameState: "EDITLECTNAME", lectArticleDraftStatus: false, lectureArticle: {article: null, state: ""}};
                 lectureArr.push(lectureObj);
                 let template = lectNameAndArticleStates(objIdVal, lectArrLen, objLectNameVal);
                 $(idMainDiv).append(template);
@@ -34,19 +34,21 @@
                 for(var ctr = 0; ctr < lectureArr.length; ctr++){ 
                     let objLectNameVal = lectureArr[ctr].lectureName;
                     let objIdVal = lectureArr[ctr].id;
-                    let objLectArticle = lectureArr[ctr].lectureArticle.article; 
+                    let objLectArticle = lectureArr[ctr].lectureArticle.article;
+                    if(objLectArticle == ''){
+                        lectureArr[ctr].lectArticleDraftStatus = false;
+                    } 
                     lectureArr[ctr].lectArticleDraftStatus = false;                  
-                    $(idMainDiv).append(lectNameAndArticleStates(objIdVal , ctr , objLectNameVal, lectNum));
+                    $(idMainDiv).append(lectNameAndArticleStates(objIdVal , ctr, objLectNameVal, lectNum));
                     lectureArr[ctr].lectArticleDraftStatus = true; 
                     $(idMainDiv).append(lectNameAndArticleStates(objIdVal, ctr, objLectArticle));
                 }
 
             }
             function addToLectureArr(lectArrLen, lectIdIndex){
-                $(`#idAddBtn`).attr("disabled", false);
                let objLectNameVal = document.getElementById(`idLectureInput${lectArrLen}`).value;
                lectureArr[lectIdIndex].lectureName = objLectNameVal;
-               lectureArr[lectIdIndex].lectNameState = "DISPLAY";
+               lectureArr[lectIdIndex].lectNameState = "DISPLAYLECTNAME";
                lectNum++;
                let id = lectureArr[lectIdIndex].id;
                console.log(lectureArr);
@@ -56,13 +58,10 @@
             }
             function removeDisplay(lectArrLen){
                 console.log(lectureArr);
-                console.log(lectArrLen);
                 lectureArr.splice(lectArrLen, 1);
                 if(lectureArr.length > 0){
                     objIdVal = lectureArr[lectureArr.length - 1].id + 1;
                 }
-                
-                console.log(lectureArr);
                 $(`#idDisplayLectNameDiv${lectArrLen}`).remove(); 
                 displayLectNameElement()
 			}
@@ -76,23 +75,21 @@
             function editLectName(lectArrLen){
                 let objIdVal = lectureArr[lectArrLen].id;
                 let idIndex = getIndexByLectId(objIdVal)
-                lectureArr[idIndex].lectNameState =  "EDIT";
+                lectureArr[idIndex].lectNameState =  "EDITLECTNAME";
                 displayLectNameElement();
             }
             
             function contentStateToList(lectArrLen, objIdVal){
-                $(`#idcontentBtn${lectArrLen}`).attr("disabled", true);
                 let idIndex = getIndexByLectId(objIdVal);
                 lectureArr[idIndex].lectArticleDraftStatus = true;
                 lectureArr[idIndex].lectureArticle.state = "LIST";
-                $(`#idDisplayLectNameDiv${lectArrLen}`).append(lectNameAndArticleStates(lectArrLen, objIdVal));
-
+                displayLectNameElement();
             }
             function addArticleTextArea(lectArrLen, objIdVal){
-                $(`#idArticleBtn${lectArrLen}`).attr("disabled", true);
                 let idIndex = getIndexByLectId(objIdVal);
                 lectureArr[idIndex].lectureArticle.state = "EDIT";
-                $(`#idDisplayLectNameDiv${lectArrLen}`).append(lectNameAndArticleStates(lectArrLen, objIdVal));
+
+                displayLectNameElement()
             }
             function addLectArticleToArr(lectArrLen, objIdVal){
                 var idIndex = getIndexByLectId(objIdVal);
@@ -101,20 +98,18 @@
                 lectureArr[idIndex].lectureArticle.state = 'DISPLAY';
                 lectureArr[idIndex].lectureArticle.article = textAreaContent;
                 $(`#idTextAreaDiv${lectArrLen}`).remove();
-                $(`#idDisplayLectNameDiv${lectArrLen}`).append(lectNameAndArticleStates(lectArrLen, objIdVal, textAreaContent));
+                displayLectNameElement();
             } 
             function editArticle(lectArrLen, objIdVal){
-                
                 let idIndex = getIndexByLectId(objIdVal);
                 lectureArr[idIndex].lectureArticle.state = 'EDIT';
                 let textAreaContent = lectureArr[idIndex].lectureArticle.article;
-                $(`#idSpanContent${lectArrLen}`).replaceWith(lectNameAndArticleStates(lectArrLen, objIdVal, textAreaContent))
-
+                displayLectNameElement();
             }
             function deleteArticle(lectArrLen, objIdVal){
-                var idIndex = getIndexByLectId(objIdVal);
+                let idIndex = getIndexByLectId(objIdVal);
                 $(`#idSpanContent${lectArrLen}`).remove();
-                lectureArr[idIndex].lectureArticle.article = '';
+                lectureArr[idIndex].lectureArticle.article = null;
                 console.log(lectureArr);
             }
             // lectAndArticleStates
@@ -122,7 +117,7 @@
                 let idIndex = getIndexByLectId(objIdVal);
                 const lectAndArticleTemplate = `
                 <% if(lectureObject.lectArticleDraftStatus === false) {%>
-                    <% if(lectureObject.lectNameState === 'EDIT') {%>
+                    <% if(lectureObject.lectNameState === 'EDITLECTNAME') {%>
                         <div id="idEditDiv<%= lectArrLen1 %>" style = "border: 1px solid black; width: 500px; margin-left: 100px;" >
                             <div id= "idLabelDiv<%= lectArrLen1 %>" style= "font-size: initial; margin-left: 10px" >
                                 <label id= "idLectureLabel<%= lectArrLen1 %>" >Lecture </label><%= lectArrLen1 + 1 %><label>: </label>
@@ -135,38 +130,38 @@
                             </div>  
                         </div>
                     <% } %> 
-                <% if(lectureObject.lectNameState === 'DISPLAY') {%>
-                    <div id="idDisplayLectNameDiv<%= lectArrLen1 %>" style = "border: 1px solid black; width: 500px; margin-left: 100px;" >
-                        <div id= "idLabelDiv<%= lectArrLen1 %>" style= "font-size: initial; margin-left: 10px" >
-                            <label id= "idLectureLabel<%= lectArrLen1 %>" >Lecture </label><%= lectArrLen1 + 1 %><label>: </label>
-                            <span id="idLectNameSpan<%= lectArrLen1 %>"><%= objLectNameVal1 %></span>
+                    <% if(lectureObject.lectNameState === 'DISPLAYLECTNAME') {%>
+                        <div id="idDisplayLectNameDiv<%= lectArrLen1 %>" style = "border: 1px solid black; width: 500px; margin-left: 100px;" >
+                            <div id= "idLabelDiv<%= lectArrLen1 %>" style= "font-size: initial; margin-left: 10px" >
+                                <label id= "idLectureLabel<%= lectArrLen1 %>" >Lecture </label><%= lectArrLen1 + 1 %><label>: </label>
+                                <span id="idLectNameSpan<%= lectArrLen1 %>"><%= objLectNameVal1 %></span>
+                            </div>
+                            <div id= "idEditRemoveDiv<%= lectArrLen1 %>" style = "margin-left: 350px; width: 150px;">
+                                <button id= "idEditBtn<%= lectArrLen1 %>" onclick= "editLectName(<%= lectArrLen1 %>, <%= lectNum1 %>)">Edit</button>
+                                <button id="idRemoveBtn<%= lectArrLen1 %>" onclick="removeDisplay(<%= lectArrLen1 %>)">Remove</button>
+                                <button id= "idcontentBtn<%= lectArrLen1 %>" onclick = "contentStateToList(<%= lectArrLen1 %>, <%= objIdVal1 %>)">Content</button>
+                            </div>
                         </div>
-                        <div id= "idEditRemoveDiv<%= lectArrLen1 %>" style = "margin-left: 350px; width: 150px;">
-                            <button id= "idEditBtn<%= lectArrLen1 %>" onclick= "editLectName(<%= lectArrLen1 %>, <%= lectNum1 %>)">Edit</button>
-                            <button id="idRemoveBtn<%= lectArrLen1 %>" onclick="removeDisplay(<%= lectArrLen1 %>)">Remove</button>
-                            <button id= "idcontentBtn<%= lectArrLen1 %>" onclick = "contentStateToList(<%= lectArrLen1 %>, <%= objIdVal1 %>)">Content</button>
-                        </div>
-                    </div>
+                    <% } %>
                 <% } %>
-            <% } %>
                 <% if(lectureObject.lectArticleDraftStatus === true) {%>
                     <% if(lectureObject.lectureArticle.state === 'LIST') { %>
-                        <div id= "idArticleOptionDiv<%= lectArrLen1 %>" style= "border: 1px solid black; width: 500px;">
+                        <div id= "idArticleOptionDiv<%= lectArrLen1 %>" style= "width: 500px; margin-left: 100px;">
                             <div id= "idArticleDiv<%= lectArrLen1 %>" style= "margin-top: 3px;">
                                 <button id= "idArticleBtn<%= lectArrLen1 %>" onclick= "addArticleTextArea(<%= lectArrLen1 %>, <%= objIdVal1 %>)" >Article</button>
                             </div>
                         </div>
                     <% } %>
                     <% if(lectureObject.lectureArticle.state === 'EDIT') { %>
-                        <div id= "idTextAreaDiv<%= lectArrLen1 %>" style= "border: 1px solid black; width: 500px;"><textarea id= "idArticle<%= lectArrLen1 %>" style= "width: 300px;"  ><%= lectureObject.lectureArticle.article %></textarea>
+                        <div id= "idTextAreaDiv<%= lectArrLen1 %>" style= "width: 500px; margin-left: 100px;"><textarea id= "idArticle<%= lectArrLen1 %>" style= "width: 300px;"  ><%= lectureObject.lectureArticle.article %></textarea>
                             <button id= "idSaveArticleBtn<%= lectArrLen1 %>" onclick= "addLectArticleToArr(<%= lectArrLen1 %>, <%= objIdVal1 %>)">Save Article</button>
                         </div>
                     <% } %>
-                    <% if(lectureObject.lectureArticle.state === 'DISPLAY') { %>
-                        <div id= "idSpanContent<%= lectArrLen1 %>" style= "border: 1px solid black; width: 500px;">
+                    <% if(lectureObject.lectureArticle.state === 'DISPLAY' && lectureObject.lectureArticle.article != null) { %>
+                        <div id= "idSpanContent<%= lectArrLen1 %>" style= "width: 500px; margin-left: 100px;">
                             <%= lectureObject.lectureArticle.article %>
-                            <button id ="idEditArticleBtn<%= lectArrLen1 %>" onclick = "editArticle(<%= lectArrLen1 %>, <%= objIdVal1 %>)" >Edit article.</button>
-                            <button id = "idDeleteArticleBtn<%= lectArrLen1 %>" onclick= "deleteArticle(<%= lectArrLen1 %>, <%= objIdVal1 %>)">Delete article.</button>
+                            <button id ="idEditArticleBtn<%= lectArrLen1 %>" onclick = "addArticleTextArea(<%= lectArrLen1 %>, <%= objIdVal1 %>)" >Edit article.</button>
+                            <button id = "idDeleteArticleBtn<%= lectArrLen1 %>" onclick = "deleteArticle(<%= lectArrLen1 %>, <%= objIdVal1 %>)">Delete article.</button>
                         </div>
                     <% } %>
                 <% } %>
