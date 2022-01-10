@@ -1,0 +1,26 @@
+#idAddBtn{
+  margin-left: 70%;
+}
+#idEditLectDiv, #idDisplayLectNameDiv{
+  margin-left: 15cm;
+  margin-right: 15cm;
+  border: 1px solid black;
+  height: auto;
+  width: auto;
+}
+#idSpanLabel{
+  margin-top: 0.5cm;
+}
+#idLectureInput{
+  width: 4cm;
+  height: 0cm
+}
+.classSaveCancelBtn{
+  margin-top: 0.5cm;
+}
+#idEditRemoveContentbtns{
+  margin-top: 0.5cm;
+}
+#idArticleDiv{
+  margin-top: 0.2cm;
+}
