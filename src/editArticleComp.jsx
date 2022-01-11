@@ -23,7 +23,7 @@ export const EditArticleComp = (props) => {
         minRows: "5",
     }
     return( <div id= "idTextAreaDiv">
-        <TextField  id= "idArticle" inputProps={inputProps} placeholder = "Enter a article." value={objDuplicate.lectureArticle.article} onChange={handleOnChange}></TextField>
+        <TextField  id= "idArticle" inputProps={inputProps} multiline= {true} placeholder = "Enter a article." value={objDuplicate.lectureArticle.article} onChange={handleOnChange}></TextField>
         <Button variant="contained" size="small" color="primary" id= "idSaveArticleBtn" onClick={handleOnClick} >Save Article</Button>
     </div>
 

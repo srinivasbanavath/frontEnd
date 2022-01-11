@@ -1,12 +1,20 @@
 #idAddBtn{
   margin-left: 70%;
 }
-#idEditLectDiv, #idDisplayLectNameDiv{
-  margin-left: 15cm;
-  margin-right: 15cm;
+#idEditLecCard, #idDisplayLectNameCard{
+  margin-top: 0.2cm;
+  margin-left: 10cm;
+  margin-right: 10cm;
   border: 1px solid black;
   height: auto;
   width: auto;
+}
+#idLectureInput{
+  margin-right: 4cm;
+}
+#idLabelInputDiv{
+  margin-top: 0.2cm;
+  margin-right: 8cm;
 }
 #idSpanLabel{
   margin-top: 0.5cm;
@@ -15,12 +23,18 @@
   width: 4cm;
   height: 0cm
 }
-.classSaveCancelBtn{
-  margin-top: 0.5cm;
+#idCancelLectBtn{
+  margin-left: 12cm;
+}
+#idArticle{
+  margin-right: 6cm;
+}
+#idSaveLectBtn, #idRemoveBtn, #idcontentBtn, #idSaveArticleBtn, #idDeleteArticleBtn{
+  margin-left: 0.2cm;
 }
 #idEditRemoveContentbtns{
   margin-top: 0.5cm;
 }
-#idArticleDiv{
+#idArticleDiv, #idTextAreaDiv, #idSpanContent{
   margin-top: 0.2cm;
 }

@@ -3,6 +3,7 @@ import { ContentListComp } from './contentListComp';
 import { EditArticleComp } from './editArticleComp';
 import { DisplayArticleComp } from './displayArticleComp';
 import Button from '@mui/material/Button';
+import { Card } from '@mui/material';
 export const DisplayLectComp = (props) => {
     const [objDuplicate, setObjDuplicate] = useState(props.lectObj);
 
@@ -40,8 +41,8 @@ export const DisplayLectComp = (props) => {
     setObjDuplicate(updatedLect);
    }
 
-    return( 
-    <div id="idDisplayLectNameDiv">
+    return( <Card variant="outlined" id="idDisplayLectNameCard">
+    {/* <div id="idDisplayLectNameDiv"> */}
         <div id="idSpanLabel">
             <label id= "idLectureLabel" >Lecture </label>{props.lectNum}<label>: </label>
             <span id="idLectNameSpan">{props.lectName}</span>
@@ -57,7 +58,8 @@ export const DisplayLectComp = (props) => {
             objDuplicate.lectureArticle.state === "EDIT"? <EditArticleComp key={objDuplicate.id} lectObj={objDuplicate} editToDisplayState={handleEditToDisplay}/>:
             <DisplayArticleComp key={objDuplicate.id} lectObj={objDuplicate} deleteArticle={handleDeleteArticle} displayToEditState={handleDisplayToEdit}/>: null
         }
-    </div>
+    {/* </div> */}
+    </Card>
     
 
     );
